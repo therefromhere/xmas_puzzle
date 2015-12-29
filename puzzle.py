@@ -73,6 +73,23 @@ def init_rules():
 
 
 def iterate_row(row, rules):
+
+    rule_spaces = len(rules) - 1
+    rule_unknowns = len(row) - sum(rules) - rule_spaces
+
+    if rule_unknowns == 0:
+        # no unknowns fit, fill in the whole row
+        x = 0
+        for set_length in rules:
+            for set_x in range(set_length):
+                row[x] = True
+                x += 1
+
+            if x < len(row):
+                # blanks
+                row[x] = False
+                x += 1
+
     return row
 
 
