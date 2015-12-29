@@ -36,7 +36,7 @@ def transpose_board(board):
     return transposed_board
 
 
-def init_rules():
+def init_rules(size):
     row_rules = (
                     (7, 3, 1, 1, 7, ),
                  (1, 1, 2, 2, 1, 1, ),
@@ -49,25 +49,30 @@ def init_rules():
         (1, 2, 3, 1, 1, 3, 1, 1, 2, ),
                  (1, 1, 3, 2, 1, 1, ),
                  (4, 1, 4, 2, 1, 2, ),
-        # ...
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
-        (),
+           (1, 1, 1, 1, 1, 4, 1, 3, ),
+                 (2, 1, 1, 1, 2, 5, ),
+                 (3, 2, 2, 6, 3, 1, ),
+                 (1, 9, 1, 1, 2, 1, ),
+                 (2, 1, 2, 2, 3, 1, ),
+              (3, 1, 1, 1, 1, 5, 1, ),
+                       (1, 2, 2, 5, ),
+              (7, 1, 2, 1, 1, 1, 3, ),
+              (1, 1, 2, 1, 2, 2, 1, ),
+                 (1, 3, 1, 4, 5, 1, ),
+                 (1, 3, 1, 3, 10,2, ),
+                 (1, 3, 1, 1, 6, 6, ),
+                 (1, 1, 2, 1, 1, 2, ),
+                    (7, 2, 1, 2, 5, ),
     )
 
     col_rules = (
     )
+
+    for row in row_rules:
+        assert sum(row) <= size
+
+    for row in col_rules:
+        assert sum(row) <= size
 
     return row_rules, col_rules
 
@@ -105,7 +110,7 @@ def iterate_board(board, row_rules, col_rules):
 
 if __name__ == "__main__":
     board = init_board(BOARD_SIZE)
-    row_rules, col_rules = init_rules()
+    row_rules, col_rules = init_rules(BOARD_SIZE)
 
     #print_board(board)
     #print('------------')
