@@ -66,7 +66,35 @@ def init_rules(size):
     )
 
     col_rules = (
+                    (7, 2, 1, 1, 7, ),
+                 (1, 1, 2, 2, 1, 1, ),
+        (1, 3, 1, 3, 1, 3, 1, 3, 1, ),
+           (1, 3, 1, 1, 5, 1, 3, 1, ),
+           (1, 3, 1, 1, 4, 1, 3, 1, ),
+                 (1, 1, 1, 2, 1, 1, ),
+              (7, 1, 1, 1, 1, 1, 7, ),
+                          (1, 1, 3, ),
+              (2, 1, 2, 1, 8, 2, 1, ),
+           (2, 2, 1, 2, 1, 1, 1, 2, ),
+                    (1, 7, 3, 2, 1, ),
+           (1, 2, 3, 1, 1, 1, 1, 1, ),
+                    (4, 1, 1, 2, 6, ),
+              (3, 3, 1, 1, 1, 3, 1, ),
+                    (1, 2, 5, 2, 2, ),
+        (2, 2, 1, 1, 1, 1, 1, 2, 1, ),
+              (1, 3, 3, 2, 1, 8, 1, ),
+                          (6, 2, 1, ),
+                 (7, 1, 4, 1, 1, 3, ),
+                    (1, 1, 1, 1, 4, ),
+                 (1, 3, 1, 3, 7, 1, ),
+        (1, 3, 1, 1, 1, 2, 1, 1, 4, ),
+                 (1, 3, 1, 4, 3, 3, ),
+              (1, 1, 2, 2, 2, 6, 1, ),
+                 (7, 1, 3, 2, 1, 1, ),
     )
+
+    assert len(row_rules) == size
+    assert len(col_rules) == size
 
     for row in row_rules:
         assert sum(row) <= size
@@ -101,9 +129,14 @@ def iterate_row(row, rules):
 def iterate_board(board, row_rules, col_rules):
 
     for i, row in enumerate(board):
-        #print(i, row)
-        #print(row_rules[i])
         board[i] = iterate_row(row, row_rules[i])
+
+    board = transpose_board(board)
+
+    for i, row in enumerate(board):
+        board[i] = iterate_row(row, col_rules[i])
+
+    board = transpose_board(board)
 
     return board
 
