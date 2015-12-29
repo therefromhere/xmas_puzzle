@@ -1,26 +1,24 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from __future__ import unicode_literals
 from print import print_board
+from cell_values import CELL_UNKNOWN, CELL_EMPTY, CELL_FILLED
 
 BOARD_SIZE = 25
 
 
 def init_row(board, y, row_str):
     assert len(row_str) == len(board[y])
+    assert set(list(row_str)) <= set([CELL_UNKNOWN, CELL_EMPTY, CELL_FILLED])
 
-    decode = {
-        '.': None,
-        'X': True,
-    }
-
-    board[y] = [ decode[cell] for cell in row_str ]
+    board[y] = row_str
 
     return board
 
 
 def init_board(size):
-    board = [[ None for col in range(size) ] for row in range(size)]
+    board = [ CELL_UNKNOWN * size for row in range(size)]
 
     board = init_row(board, 3,  '...XX.......XX.......X...')
     board = init_row(board, 8,  '......XX..X...XX..X......')
@@ -105,8 +103,21 @@ def init_rules(size):
     return row_rules, col_rules
 
 
-def iterate_row(row, rules):
+def get_possible_values(row , rules, x):
+    rule_spaces = len(rules) - 1
+    rule_unknowns = len(row) - sum(rules) - rule_spaces
 
+    rule_parts = []
+
+
+
+    possibles = set()
+
+    if x < rule_unknowns:
+        possibles.add(None)
+
+def iterate_row(row, rules):
+    row = list(row)
     rule_spaces = len(rules) - 1
     rule_unknowns = len(row) - sum(rules) - rule_spaces
 
@@ -115,13 +126,25 @@ def iterate_row(row, rules):
         x = 0
         for set_length in rules:
             for set_x in range(set_length):
-                row[x] = True
+                row[x] = CELL_FILLED
                 x += 1
 
             if x < len(row):
                 # blanks
-                row[x] = False
+                row[x] = CELL_EMPTY
                 x += 1
+    else:
+        for x, v in enumerate(row):
+            if v is not None:
+                # already known
+                continue
+
+            possible = get_possible_values(row, rules, x)
+
+            if len(possible) == 1:
+                row[x] = possible[0]
+
+    row = ''.join(row)
 
     return row
 
