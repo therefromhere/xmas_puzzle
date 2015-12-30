@@ -16,6 +16,7 @@ display = {
 if NEGATIVE:
     display[CELL_EMPTY], display[CELL_FILLED] = display[CELL_FILLED], display[CELL_EMPTY]
 
+
 def print_board(board):
     for row in board:
         row_letters = [display[c] for c in row]
