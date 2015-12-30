@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from itertools import permutations, product, ifilter
+from six.moves import filter, xrange
+from itertools import permutations, product
 
 
 def rule_asc_len(number, buckets):
@@ -115,4 +116,4 @@ def partition_buckets_slow(number, buckets, minimum=0):
     """
 
     # this generates all values for all buckets and discards those with the wrong sum
-    return ifilter(lambda x: sum(x) == number, product(xrange(number + 1), repeat=buckets))
+    return filter(lambda x: sum(x) == number, product(xrange(number + 1), repeat=buckets))
