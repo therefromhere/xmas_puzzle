@@ -135,10 +135,10 @@ def generate_rule_combinations(rules, size):
     """
     Generator that returns all possible patterns matching "rules"
 
-    >>> list(generate_rule_combinations((2,1,), 5))
-    ['XX-X-', 'XX--X', '-XX-X']
+    >>> sorted(generate_rule_combinations((2,1,), 5))
+    ['-XX-X', 'XX--X', 'XX-X-']
 
-    >>> list(generate_rule_combinations((5,), 5))
+    >>> sorted(generate_rule_combinations((5,), 5))
     ['XXXXX']
 
     :param rules: tuple of run lengths of filled cells - all other cells are guaranteed empty, eg (7, 3, 1, 1, 7,)
@@ -178,11 +178,11 @@ def generate_row_candidates(row, rules):
     Given row and rules, generates potential solutions
 
     eg: nothing known
-    >>> list(generate_row_candidates('.....', (2, 1)))
-    ['XX-X-', 'XX--X', '-XX-X']
+    >>> sorted(generate_row_candidates('.....', (2, 1)))
+    ['-XX-X', 'XX--X', 'XX-X-']
 
-    >>> list(generate_row_candidates('....X', (2, 1)))
-    ['XX--X', '-XX-X']
+    >>> sorted(generate_row_candidates('....X', (2, 1)))
+    ['-XX-X', 'XX--X']
 
     :param row: string
     :param rules: tuple
@@ -226,18 +226,17 @@ def iterate_board(board, row_rules, col_rules):
     iteration = 0
     complete_rows = 0
     while complete_rows < len(board):
+        complete_rows = 0
         for i, row in enumerate(board):
             if CELL_UNKNOWN not in row:
                 complete_rows += 1
                 continue
 
-            #print("row", i, row)
             board[i] = iterate_row(row, row_rules[i])
             iteration += 1
 
             print_board(board, row_marker=i)
-            print("-------------------------", iteration)
-            #print("row", i, row, board[i])
+            print("-------------------------", iteration, complete_rows)
 
 
         board = transpose_board(board)
@@ -252,12 +251,10 @@ def iterate_board(board, row_rules, col_rules):
             iteration += 1
 
             print_board(board, col_marker=i)
-            print("-------------------------", iteration)
+            print("-------------------------", iteration, complete_rows)
             board = transpose_board(board)
 
         board = transpose_board(board)
-
-        complete_rows = 0
 
     return board
 
