@@ -223,26 +223,41 @@ def iterate_row(row, rules):
 
 def iterate_board(board, row_rules, col_rules):
 
-    for i, row in enumerate(board):
-        #print("row", i, row)
-        board[i] = iterate_row(row, row_rules[i])
+    iteration = 0
+    complete_rows = 0
+    while complete_rows < len(board):
+        for i, row in enumerate(board):
+            if CELL_UNKNOWN not in row:
+                complete_rows += 1
+                continue
 
-        print_board(board)
-        print("-------------------------")
-        #print("row", i, row, board[i])
+            #print("row", i, row)
+            board[i] = iterate_row(row, row_rules[i])
+            iteration += 1
 
+            print_board(board, row_marker=i)
+            print("-------------------------", iteration)
+            #print("row", i, row, board[i])
 
-    board = transpose_board(board)
-
-    for i, row in enumerate(board):
-        board[i] = iterate_row(row, col_rules[i])
 
         board = transpose_board(board)
-        print_board(board)
-        print("-------------------------")
+
+        for i, row in enumerate(board):
+            if CELL_UNKNOWN not in row:
+                continue
+
+            board[i] = iterate_row(row, col_rules[i])
+
+            board = transpose_board(board)
+            iteration += 1
+
+            print_board(board, col_marker=i)
+            print("-------------------------", iteration)
+            board = transpose_board(board)
+
         board = transpose_board(board)
 
-    board = transpose_board(board)
+        complete_rows = 0
 
     return board
 
